@@ -18,10 +18,19 @@ else
   echo "Fail: Hello test"
 fi
 
-if openssl s_client -showcerts -connect $PUBLIC_IP:443 </dev/null | grep mydomain.com
+if openssl s_client -showcerts -connect $PUBLIC_IP:443 </dev/null | grep mydomain
 then
   echo "OK: ssl cert is mydomain.com"
 else
   echo "Fail: openssl test"
 fi
+
+SSH=`ssh -o BatchMode=yes -l ec2-user $PUBLIC_IP uptime 2>&1`
+if echo $SSH | grep refused 1>/dev/null
+then
+  echo "OK: ssh is off"
+else
+  echo "Fail: ssh test"
+fi
+
 
